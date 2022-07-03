@@ -1,0 +1,23 @@
+<div class="container">
+    <ul class="ul-pretty">
+        <li *ngFor="let item of listing.records">
+            <div class="flex apartment">
+                <div>
+                <div class="flex">
+                    <p>{{item.favorite}}</p>
+                    <p>{{item.name}}</p>
+                </div>
+                <p>{{item.streetAddress}}, {{item.city}}</p>
+                <div class="flex">
+                    <div *ngFor="let floor of item.floorplans" class="inherit">
+                        <p>{{floor.type}} </p>
+                        <p> ${{floor.price}}</p>
+                    </div>
+                </div>
+                <p>{{item.highValueAmenities.length}} High value amenities</p>
+                </div>
+                <img [src]="item.photo" alt="apartment photo" />
+            </div>
+        </li>
+    </ul>
+</div>

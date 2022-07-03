@@ -1,0 +1,28 @@
+.flex {
+    display: flex;
+    justify-content: spax;
+}
+.inherit {
+    display: inherit;
+}
+.ul-pretty{
+    list-style: none;
+}
+.container {
+    width: 97%;
+}
+img {
+    max-width: 120px;
+    max-height: 120px;
+    object-fit: contain;
+}
+.apartment {
+    color: #6b6868;
+    cursor: pointer;
+    min-height: 100px;
+    transition: box-shadow .4s ease-in-out;
+    background: #fff;
+    margin: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 1px 1px 1px #e0e0e0;
+}
