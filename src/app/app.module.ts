@@ -7,6 +7,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ListComponent } from './components/list/list.component';
 import { MapComponent } from './components/map/map.component';
+import { StoreModule } from '@ngrx/store';
+import { mapReducer } from './components/map-state-store/map.reducer';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { MapComponent } from './components/map/map.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    // StoreModule.forRoot({ mapEntries: mapReducer })
   ],
   providers: [],
   bootstrap: [AppComponent]

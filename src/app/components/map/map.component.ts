@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy, Injectable } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { Map, Marker, NavigationControl } from 'mapbox-gl';
 import { BehaviorSubject } from 'rxjs';
 import { Listing } from 'src/app/models/Listing';
+import { MapElements } from 'src/app/models/MapElements';
 import { ListingService } from 'src/app/services/listing.service';
 
 @Component({
@@ -10,15 +11,22 @@ import { ListingService } from 'src/app/services/listing.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
+
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
   map: Map | undefined;
   listing!: Listing
   geo!: { type: string; features: any[] }
-  listings = new BehaviorSubject<Listing>({})
+  listings = new BehaviorSubject<Listing>({});
+  markers: Marker[] = [];
 
+
+  mapElements!: MapElements;
   @ViewChild('map')
   private mapContainer!: ElementRef<HTMLElement>;
+
+
+
 
   constructor(private listingService: ListingService) { }
 
@@ -29,8 +37,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.listingService.getAllListings()
       .subscribe((res: Listing) => {
-        // this.listing = res;
-        // console.log(res.records![1].geoCode)
+
         this.listings.next(res);
 
       })
@@ -54,15 +61,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       center: [initialState.lng, initialState.lat],
       zoom: initialState.zoom
     });
-    // const el = document.createElement('div');
-    // el.className = 'flat-marker';
+
 
     this.map.addControl(new NavigationControl());
     this.geo = {
       type: 'FeatureCollection',
       features: []
     }
-    // console.log(this.listings.getValue().records![0].geocode);
 
     this.listing = this.listings.getValue();
 
@@ -75,25 +80,41 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         properties: {
           title: 'Mapbox',
-          description: flat.city
+          description: flat.streetAddress
         }
       }
       this.geo.features.push(item)
     })
-    console.log(this.geo)
     for (const feature of this.geo.features) {
-      // create a HTML element for each feature
       const el = document.createElement('div');
       el.className = 'marker';
 
+      var popup = new mapboxgl.Popup({ offset: 25 })
+        .setText('Construction on the Washington Monument began in 1848.');
 
-      // console.log(feature.geometry.coordinates[0])
-      // make a marker for each feature and add to the map
-      new Marker({ color: 'red' }).setLngLat([feature.geometry.coordinates[0], feature.geometry.coordinates[1]]).addTo(this.map);
+      var marker = new Marker({ color: 'red' }).
+        setLngLat([feature.geometry.coordinates[0], feature.geometry.coordinates[1]]).
+        addTo(this.map).setPopup(new mapboxgl.Popup({ offset: 25 })
+          .setText(feature.properties.description));
+
+
+      this.markers.push(marker);
+
+
+
+
+      this.map!.on('click', (event) => {
+
+        this.map?.flyTo({
+          center: [event.lngLat.lng, event.lngLat.lat],
+          zoom: 17
+        })
+      });
+
+
+
     }
-    // new Marker({ color: 'red' })
-    //   .setLngLat([-97.42201, 32.700878])
-    //   .addTo(this.map);
+
 
   }
 
@@ -102,3 +123,5 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 }
+
+

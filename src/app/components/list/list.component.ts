@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Listing } from 'src/app/models/Listing';
 import { ListingService } from 'src/app/services/listing.service';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-list',
@@ -8,6 +9,7 @@ import { ListingService } from 'src/app/services/listing.service';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
+
 
   constructor(private listingService: ListingService) { }
 
@@ -26,6 +28,12 @@ export class ListComponent implements OnInit {
         // console.log(this.listing.records)
       })
   }
+
+  loadMap() {
+
+  }
+
+
 
 
 
